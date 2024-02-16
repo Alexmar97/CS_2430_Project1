@@ -80,6 +80,7 @@ public class MergeSort {
 
             while(leftIndex < leftArray.length && rightIndex < rightArray.length)
             {
+                comparisonCount++;
                 //if left term is smaller than right one, then main array will place left term first
                 if(leftArray[leftIndex] <= rightArray[rightIndex])
                 {
@@ -92,7 +93,7 @@ public class MergeSort {
 
 
                 //if right term is smaller than left one, then main array will place right term first
-                else if (rightArray[rightIndex] < leftArray[leftIndex])
+                else if (rightArray[rightIndex] <= leftArray[leftIndex])
                 {
                     array[mainIndex++] = rightArray[rightIndex++];
                     //left index stays intact since it will be compared to
