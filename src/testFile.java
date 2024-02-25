@@ -1,9 +1,21 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class testFile
 {
 
+    // Example result class to store individual test results
+    static class SortResult {
+        int[] unsortedArray;
+        int[] sortedArray;
+        int comparisons;
 
+        SortResult(int[] unsortedArray, int[] sortedArray, int comparisons) {
+            this.unsortedArray = unsortedArray;
+            this.sortedArray = sortedArray;
+            this.comparisons = comparisons;
+        }
+    }
 
     private static void printArray(int[] n) {
         for (int e : n) {
@@ -17,42 +29,62 @@ public class testFile
 
     public static void testMergeSort()
     {
-        //Testing for n = 4, n=6, n=8
-        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(4);
-        int [] test;
+        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(8);
+        ArrayList<SortResult> results = new ArrayList<>();
 
-        System.out.println("Testing for n = 4");
-
-        for(int i=0; i < arr1.size(); i++)
-        {
-
-            test = arr1.get(i);
-
-            System.out.println("Unsorted array: ");
-            printArray(test);
-
+        for (int[] test : arr1) {
             MergeSort.comparisonCount = 0;
             MergeSort.mergeSort(test);
-
-            System.out.println("Sorted Array: ");
-            printArray(test);
-            System.out.println("Number of comparisons: " + MergeSort.getComparisons());
-            System.out.println("--------------------------------");
-
+            results.add(new SortResult(test.clone(), test, MergeSort.getComparisons()));
         }
+
+        // Analyze results
+        analyzeResults(results);
 
 
         System.out.println("--------------------------------");
     }
 
+    private static void analyzeResults(ArrayList<SortResult> results) {
+        // Sort by number of comparisons
+        results.sort(Comparator.comparingInt(result -> result.comparisons));
 
+        // Calculate average
+        double average = results.stream().mapToInt(result -> result.comparisons).average().orElse(0);
+
+        // Print the best 10 cases
+        System.out.println("10 BEST CASES:");
+        for (int i = 0; i < Math.min(10, results.size()); i++) {
+            printResult(results.get(i));
+        }
+
+        // Print the worst 10 cases
+        System.out.println("10 WORST CASES:");
+        for (int i = Math.max(0, results.size() - 10); i < results.size(); i++) {
+            printResult(results.get(i));
+        }
+
+        // Print average
+        System.out.println("Average number of comparisons: " + average);
+    }
+
+    private static void printResult(SortResult result) {
+        System.out.println("Unsorted array: ");
+        printArray(result.unsortedArray);
+        System.out.println("Sorted Array: ");
+        printArray(result.sortedArray);
+        System.out.println("Number of comparisons: " + result.comparisons);
+        System.out.println("--------------------------------");
+    }
 
     public static void testHeapSort()
     {
         //int numComparisons = 0;
 
+
         int n = 8;
         // Testing for n = 4
+        ArrayList<SortResult> results = new ArrayList<>();
         ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(n);
         int[] test;
 
@@ -62,51 +94,48 @@ public class testFile
 
 
             test = arr1.get(i);
+            int[] arrayClone = test.clone();
 
-            System.out.println("Unsorted array: ");
-            printArray(test);
+            //System.out.println("Unsorted array: ");
+            //printArray(test);
 
             heapSort hs = new heapSort(test.length);
-            for (int element : test) {
+            for (int element : test)
+            {
                 hs.insert(element);
 
             }
 
-            System.out.println("Sorted Array");
+
+
+            //System.out.println("Sorted Array");
             hs.sort();
-            hs.printHeap();
-            System.out.println("Number of comparisons : " + heapSort.getComparisons());
+            //hs.printHeap();
+            //System.out.println("Number of comparisons : " + heapSort.getComparisons());
+            results.add(new SortResult(arrayClone, test, heapSort.getComparisons()));
+
 
             heapSort.comparisons=0;
         }
-        //System.out.println("Number of comparisons: " + numComparisons);
+
+        analyzeResults(results);
+
     }
 
 
     public static void testQuickSort()
     {
-        //Testing for n = 4, n=6, n=8
-        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(4);
-        int [] test;
+        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(8);
+        ArrayList<SortResult> results = new ArrayList<>();
 
-        System.out.println("Testing for n = 4");
-
-        for(int i=0; i < arr1.size(); i++)
-        {
-
-            test = arr1.get(i);
-
-            System.out.println("Unsorted array: ");
-            printArray(test);
-
-            QuickSort.comparisonCount = 0;
-            QuickSort.quickSort(test, 0, test.length-1);
-
-            System.out.println("Sorted Array");
-            printArray(test);
-            System.out.println("Number of comparisons: " + QuickSort.getComparisonCount());
-
+        for (int[] test : arr1) {
+            QuickSort.comparisonCount=0;
+           QuickSort.quickSort(test,0, test.length-1);
+            results.add(new SortResult(test.clone(), test, QuickSort.getComparisonCount()));
         }
+
+        // Analyze results
+        analyzeResults(results);
 
 
         System.out.println("--------------------------------");
@@ -115,30 +144,18 @@ public class testFile
 
     public static void testShakerSort()
     {
-        //Testing for n = 4, n=6, n=8
-        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(4);
-        int [] test;
+        ArrayList<int[]> arr1 = IntegerPermutationsGenerator.getPermutations(8);
+        ArrayList<SortResult> results = new ArrayList<>();
 
-        System.out.println("Testing for n = ");
-
-        for(int i=0; i < arr1.size(); i++)
+        for (int[] test : arr1)
         {
-
-            test = arr1.get(i);
-
-            System.out.println("Unsorted array: ");
-            printArray(test);
-
             ShakerSort.comparisonCount = 0;
-            ShakerSort.ShakerSrt.shakerSort(test);
-
-            System.out.println("Sorted Array");
-            printArray(test);
-            System.out.println("Number of comparisons: " + ShakerSort.ShakerSrt.getComparisons());
-
+            ShakerSort.shakerSort(test);
+            results.add(new SortResult(test.clone(), test, ShakerSort.getComparisons()));
         }
 
-
+        // Analyze results
+        analyzeResults(results);
         System.out.println("--------------------------------");
     }
 
@@ -147,9 +164,9 @@ public class testFile
     public static void main (String[] args)
     {
 
-        testMergeSort();
+        //testMergeSort();
 
-        //testQuickSort();
+        testQuickSort();
 
         //testHeapSort();
 

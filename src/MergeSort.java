@@ -88,7 +88,7 @@ public class MergeSort {
                     //right index stays intact since it will be compared to
                     // leftArray[l+1] in the next round
                     array[mainIndex++] = leftArray[leftIndex++];
-                    comparisonCount++;
+                    //comparisonCount++;
                 }
 
 
@@ -98,7 +98,7 @@ public class MergeSort {
                     array[mainIndex++] = rightArray[rightIndex++];
                     //left index stays intact since it will be compared to
                     // righttArray[r+1] in the next round
-                    comparisonCount++;
+                    //comparisonCount++;
                 }
             }
 
@@ -106,14 +106,14 @@ public class MergeSort {
             while (leftIndex < leftArray.length)
             {
                 array[mainIndex++] = leftArray[leftIndex++];
-                comparisonCount++;
+                //comparisonCount++;
             }
 
             // Copy any remaining elements from the right subarray
             while (rightIndex < rightArray.length)
             {
                 array[mainIndex++] = rightArray[rightIndex++];
-                comparisonCount++;
+                //comparisonCount++;
             }
 
             //System.out.println("Number of comparisons: "  + getComparisons());
